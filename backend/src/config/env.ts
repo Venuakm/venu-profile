@@ -53,10 +53,12 @@ export const env = {
   },
 
   cloudinary: {
-    cloudName: process.env.CLOUDINARY_CLOUD_NAME ?? "",
-    apiKey: process.env.CLOUDINARY_API_KEY ?? "",
-    apiSecret: process.env.CLOUDINARY_API_SECRET ?? "",
-    folder: process.env.CLOUDINARY_FOLDER ?? "venu-profile",
+    // Copy-pasted keys often carry stray whitespace, which Cloudinary rejects
+    // with a confusing "Invalid api_key" rather than a format error.
+    cloudName: (process.env.CLOUDINARY_CLOUD_NAME ?? "").trim(),
+    apiKey: (process.env.CLOUDINARY_API_KEY ?? "").replace(/\s+/g, ""),
+    apiSecret: (process.env.CLOUDINARY_API_SECRET ?? "").replace(/\s+/g, ""),
+    folder: (process.env.CLOUDINARY_FOLDER ?? "venu-profile").trim(),
   },
 
   publicUrl: process.env.PUBLIC_URL ?? `http://localhost:${process.env.PORT ?? 4000}`,

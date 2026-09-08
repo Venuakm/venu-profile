@@ -11,7 +11,7 @@ import mongoose from "mongoose";
 import { mkdir } from "node:fs/promises";
 
 import { env } from "./config/env.js";
-import { connectDbWithRetry, isDbReady } from "./db.js";
+import { connectDb, connectDbWithRetry, isDbReady } from "./db.js";
 import { requireCsrfHeader } from "./plugins/auth.js";
 import { authRoutes } from "./routes/auth.js";
 import { otpRoutes } from "./routes/otp.js";
@@ -104,11 +104,21 @@ export async function buildApp() {
     uptime: Math.round(process.uptime()),
   }));
 
-  // Data routes need Mongo; answer clearly instead of hanging while it reconnects.
+  /*
+   * Data routes need Mongo. On a cold serverless start the first request
+   * arrives before the connection is up, so wait for it rather than rejecting;
+   * connectDb is idempotent and returns any in-flight attempt. Only give up
+   * once it actually fails.
+   */
   app.addHook("onRequest", async (request, reply) => {
     if (!request.url.startsWith("/api/")) return;
     if (isDbReady()) return;
-    return reply.code(503).send({ error: "Database is reconnecting, try again in a moment" });
+    try {
+      await connectDb();
+    } catch (error) {
+      request.log.error(error);
+      return reply.code(503).send({ error: "Database is unavailable, try again in a moment" });
+    }
   });
 
   await app.register(

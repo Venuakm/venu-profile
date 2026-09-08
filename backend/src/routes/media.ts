@@ -49,9 +49,12 @@ export async function mediaRoutes(app: FastifyInstance) {
         originalName: file.filename,
       });
     } catch (error) {
-      const message = (error as Error).message;
+      request.log.error({ err: error }, "media upload failed");
+      const message = (error as Error).message ?? "";
       const tooLarge = message.includes("must be under") || message.includes("File size too large");
-      return reply.code(tooLarge ? 413 : 500).send({ error: tooLarge ? message : "Upload failed" });
+      return reply
+        .code(tooLarge ? 413 : 500)
+        .send({ error: tooLarge ? message : `Upload failed: ${message || "unknown error"}` });
     }
 
     const doc = await Media.create({
