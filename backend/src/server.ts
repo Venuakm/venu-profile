@@ -39,8 +39,14 @@ const app = Fastify({
       },
 });
 
-async function main() {
-  await mkdir(path.join(process.cwd(), env.uploadDir), { recursive: true });
+/**
+ * Builds the fully configured application without binding a port, so the
+ * long-running server and a serverless handler share exactly one code path.
+ */
+export async function buildApp() {
+  // Serverless filesystems are read-only outside /tmp. Uploads go to Cloudinary
+  // there, so failing to create a local directory is not fatal.
+  await mkdir(path.join(process.cwd(), env.uploadDir), { recursive: true }).catch(() => undefined);
 
   await app.register(helmet, {
     contentSecurityPolicy: false,
@@ -75,11 +81,17 @@ async function main() {
     limits: { fileSize: env.maxUploadMb * 1024 * 1024, files: 1 },
   });
 
-  await app.register(fastifyStatic, {
-    root: path.join(process.cwd(), env.uploadDir),
-    prefix: "/uploads/",
-    decorateReply: false,
-  });
+  // Only meaningful when uploads live on local disk; on a read-only host the
+  // directory does not exist and media is served straight from Cloudinary.
+  try {
+    await app.register(fastifyStatic, {
+      root: path.join(process.cwd(), env.uploadDir),
+      prefix: "/uploads/",
+      decorateReply: false,
+    });
+  } catch {
+    app.log.warn("Local uploads directory unavailable - serving media from Cloudinary only");
+  }
 
   // Every mutating request must carry the admin header (CSRF defence).
   app.addHook("onRequest", requireCsrfHeaderForApi);
@@ -146,6 +158,12 @@ async function main() {
     }
   });
 
+  return app;
+}
+
+/** Long-running server entry point, used by `npm run dev` and `npm start`. */
+async function start() {
+  await buildApp();
   await app.listen({ port: env.port, host: env.host });
   app.log.info(`API ready on ${env.publicUrl}`);
 }
@@ -172,7 +190,10 @@ for (const signal of ["SIGINT", "SIGTERM"] as const) {
   });
 }
 
-main().catch((error) => {
-  app.log.error(error);
-  process.exit(1);
-});
+// On Vercel the serverless handler owns the lifecycle and must not bind a port.
+if (!process.env.VERCEL) {
+  start().catch((error) => {
+    app.log.error(error);
+    process.exit(1);
+  });
+}

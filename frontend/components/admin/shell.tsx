@@ -85,6 +85,14 @@ export function AdminShell({ children }: { children: ReactNode }) {
     return () => source.close();
   }, [admin]);
 
+  // Serverless hosts terminate long-lived connections, so the stream may never
+  // deliver. Polling keeps the badge honest wherever the API happens to run.
+  useEffect(() => {
+    if (!admin) return;
+    const timer = setInterval(() => void loadNotifications(), 30000);
+    return () => clearInterval(timer);
+  }, [admin, loadNotifications]);
+
   async function markAllRead() {
     await api("/api/admin/notifications/read-all", { method: "POST" });
     setNotifications((current) => current.map((item) => ({ ...item, read: true })));
