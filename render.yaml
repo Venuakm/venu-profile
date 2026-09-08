@@ -1,0 +1,87 @@
+# Render blueprint for the API.
+# In the Render dashboard: New > Blueprint, point it at this repository.
+# Every value marked sync:false must be filled in by hand - they are secrets.
+services:
+  - type: web
+    name: venu-profile-api
+    runtime: node
+    plan: free
+    region: singapore
+    rootDir: backend
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+
+      # MongoDB Atlas connection string.
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB
+        value: venu_profile
+
+      # Generate each of these with:
+      #   node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: REFRESH_TOKEN_SECRET
+        generateValue: true
+      - key: COOKIE_SECRET
+        generateValue: true
+      - key: ACCESS_TOKEN_TTL
+        value: 15m
+      - key: REFRESH_TOKEN_TTL_DAYS
+        value: 7
+      - key: MAX_LOGIN_ATTEMPTS
+        value: 8
+      - key: LOCKOUT_MINUTES
+        value: 15
+
+      # The deployed frontend origin, e.g. https://venu-profile.vercel.app
+      - key: CORS_ORIGINS
+        sync: false
+      - key: SITE_URL
+        sync: false
+      - key: PUBLIC_URL
+        sync: false
+
+      # Owner account, used by the seed script on first run.
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_NAME
+        value: Venu Akkamgari
+      - key: ADMIN_PASSWORD
+        sync: false
+
+      # Gmail SMTP (app password, spaces are stripped automatically).
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_SECURE
+        value: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: MAIL_FROM
+        sync: false
+      - key: MAIL_TO
+        sync: false
+
+      # Cloudinary - required in production, the disk here is ephemeral.
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_FOLDER
+        value: venu-profile
+
+      - key: MAX_UPLOAD_MB
+        value: 8

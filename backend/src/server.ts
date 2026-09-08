@@ -21,6 +21,8 @@ import { messageRoutes } from "./routes/messages.js";
 import { notificationRoutes } from "./routes/notifications.js";
 import { mediaRoutes } from "./routes/media.js";
 import { Project } from "./models/Project.js";
+import { Admin } from "./models/Admin.js";
+import bcrypt from "bcryptjs";
 import { defaultProjects } from "./lib/defaultContent.js";
 
 const app = Fastify({
@@ -125,6 +127,19 @@ async function main() {
 
   whenDbReady(async () => {
     await getOrCreateContent();
+
+    // First boot on a fresh database creates the owner account from the
+    // environment, so a deployment does not need shell access to seed itself.
+    if ((await Admin.countDocuments()) === 0 && env.adminPassword) {
+      await Admin.create({
+        email: env.adminEmail.toLowerCase(),
+        username: (process.env.ADMIN_USERNAME ?? "").toLowerCase() || undefined,
+        passwordHash: await bcrypt.hash(env.adminPassword, 12),
+        name: env.adminName,
+        role: "owner",
+      });
+      app.log.info(`Created owner account for ${env.adminEmail}`);
+    }
     if ((await Project.countDocuments()) === 0) {
       await Project.insertMany(defaultProjects);
       app.log.info(`Seeded ${defaultProjects.length} projects`);

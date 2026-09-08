@@ -9,6 +9,8 @@ const mediaSchema = new Schema(
     size: { type: Number, default: 0 },
     alt: { type: String, default: "" },
     folder: { type: String, default: "general", index: true },
+    provider: { type: String, enum: ["cloudinary", "local"], default: "local" },
+    publicId: { type: String, default: null },
   },
   { timestamps: true }
 );

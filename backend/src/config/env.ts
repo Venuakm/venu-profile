@@ -52,6 +52,13 @@ export const env = {
     to: process.env.MAIL_TO ?? process.env.ADMIN_EMAIL ?? "venuakkamgari@gmail.com",
   },
 
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME ?? "",
+    apiKey: process.env.CLOUDINARY_API_KEY ?? "",
+    apiSecret: process.env.CLOUDINARY_API_SECRET ?? "",
+    folder: process.env.CLOUDINARY_FOLDER ?? "venu-profile",
+  },
+
   publicUrl: process.env.PUBLIC_URL ?? `http://localhost:${process.env.PORT ?? 4000}`,
   siteUrl: process.env.SITE_URL ?? "http://localhost:3000",
   uploadDir: process.env.UPLOAD_DIR ?? "uploads",
