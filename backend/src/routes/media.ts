@@ -61,7 +61,7 @@ export async function mediaRoutes(app: FastifyInstance) {
     const doc = await Media.create({
       filename,
       originalName: file.filename,
-      url: `${env.publicUrl}/uploads/${filename}`,
+      url: `/uploads/${filename}`,
       mime: file.mimetype,
       size: file.file.bytesRead,
       folder,

@@ -1,4 +1,13 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+/**
+ * In the browser the API is same-origin: Next rewrites /api/* to the Fastify
+ * server (see next.config.mjs). That means the site keeps working behind a
+ * tunnel or on another device, and auth cookies stay first-party.
+ *
+ * On the server there is no origin to be relative to, so it calls the API
+ * directly.
+ */
+export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
+const SERVER_API_URL = process.env.INTERNAL_API_URL || "http://localhost:4000";
 
 export class ApiError extends Error {
   status: number;
@@ -17,8 +26,9 @@ type RequestOptions = RequestInit & { json?: unknown };
 export async function api<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { json, headers, ...rest } = options;
   const method = (rest.method ?? (json ? "POST" : "GET")).toUpperCase();
+  const base = typeof window === "undefined" ? SERVER_API_URL : API_URL;
 
-  const response = await fetch(`${API_URL}${path}`, {
+  const response = await fetch(`${base}${path}`, {
     ...rest,
     method,
     credentials: "include",
@@ -47,7 +57,7 @@ export async function api<T>(path: string, options: RequestOptions = {}): Promis
 /** Server-side fetch used by the public pages. Never throws - falls back to null. */
 export async function fetchPublic<T>(path: string, revalidate = 30): Promise<T | null> {
   try {
-    const response = await fetch(`${API_URL}${path}`, {
+    const response = await fetch(`${SERVER_API_URL}${path}`, {
       next: { revalidate },
       headers: { Accept: "application/json" },
     });
