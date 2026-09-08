@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { OtpCode, type OtpPurpose } from "../models/OtpCode.js";
 import { escapeHtml, sendMail } from "./mailer.js";
+import { env } from "../config/env.js";
 import { notify } from "./notify.js";
 
 const CODE_LENGTH = 6;
@@ -31,7 +32,7 @@ export async function issueOtp(
   admin: { _id: unknown; email: string; name: string },
   purpose: OtpPurpose,
   meta: { ip: string; userAgent: string }
-): Promise<{ expiresAt: Date }> {
+): Promise<{ expiresAt: Date; devCode?: string }> {
   await OtpCode.updateMany(
     { admin: admin._id, purpose, consumedAt: null },
     { $set: { consumedAt: new Date() } }
@@ -49,14 +50,19 @@ export async function issueOtp(
     userAgent: meta.userAgent,
   });
 
-  await sendMail({
+  const delivery = await sendMail({
     to: admin.email,
     subject: `${code} is your verification code`,
     html: otpTemplate(code, purpose, meta.ip),
     text: `Your code is ${code}. It expires in ${TTL_MINUTES} minutes. If this wasn't you, ignore this email and change your password.`,
   });
 
-  return { expiresAt };
+  /*
+   * With no SMTP transport the code only reaches the server console, which the
+   * person signing in cannot see. On a development machine, hand it back so the
+   * flow stays usable. Never in production, and never once mail is working.
+   */
+  return { expiresAt, devCode: !env.isProd && !delivery.delivered ? code : undefined };
 }
 
 export type VerifyResult =

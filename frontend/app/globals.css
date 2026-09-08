@@ -30,6 +30,10 @@
 
   --accent: #e11d2a;
   --accent-soft: #ff2b3d;
+
+  --orb-accent: radial-gradient(circle, rgba(225, 29, 42, 0.26), transparent 70%);
+  --orb-cool: radial-gradient(circle, rgba(90, 120, 255, 0.18), transparent 70%);
+  --scan-opacity: 0.07;
 }
 
 :root.light {
@@ -54,6 +58,11 @@
   --outline-stroke: rgba(10, 12, 20, 0.22);
   --noise-opacity: 0.02;
   --scrollbar-track: #e8eaef;
+
+  /* Much softer on white - the dark-mode values wash the page out. */
+  --orb-accent: radial-gradient(circle, rgba(225, 29, 42, 0.09), transparent 70%);
+  --orb-cool: radial-gradient(circle, rgba(90, 120, 255, 0.07), transparent 70%);
+  --scan-opacity: 0.03;
 }
 
 @theme inline {

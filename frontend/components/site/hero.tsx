@@ -43,6 +43,37 @@ function RoleTicker({ roles }: { roles: string[] }) {
   );
 }
 
+/**
+ * Pinned to the viewport, not to the hero section - the section is taller than
+ * the screen, so an absolutely positioned cue ends up sitting on the marquee.
+ * It fades out as soon as scrolling starts, since it has done its job by then.
+ */
+function ScrollCue() {
+  const { scrollY } = useScroll();
+  const opacity = useTransform(scrollY, [0, 160], [1, 0]);
+  const y = useTransform(scrollY, [0, 160], [0, 20]);
+
+  return (
+    <motion.a
+      href="#about"
+      aria-label="Scroll to about"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 1.8 }}
+      className="fixed bottom-7 left-1/2 z-30 hidden -translate-x-1/2 flex-col items-center gap-2 text-mute lg:flex"
+    >
+      <motion.span style={{ opacity, y }} className="flex flex-col items-center gap-2">
+        <span className="rounded-full bg-ink/70 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.28em] backdrop-blur-sm">
+          scroll
+        </span>
+        <motion.span animate={{ y: [0, 7, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>
+          <ArrowDown className="h-4 w-4" />
+        </motion.span>
+      </motion.span>
+    </motion.a>
+  );
+}
+
 export function Hero({ hero, marquee }: { hero: SiteContent["hero"]; marquee: string[] }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -230,18 +261,7 @@ export function Hero({ hero, marquee }: { hero: SiteContent["hero"]; marquee: st
         </div>
       ) : null}
 
-      <motion.a
-        href="#about"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.8 }}
-        className="absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-mute lg:flex"
-      >
-        <span className="font-mono text-[10px] uppercase tracking-[0.28em]">scroll</span>
-        <motion.span animate={{ y: [0, 7, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>
-          <ArrowDown className="h-4 w-4" />
-        </motion.span>
-      </motion.a>
+      <ScrollCue />
     </section>
   );
 }

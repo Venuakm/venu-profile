@@ -82,14 +82,14 @@ export function Contact({
                 Send a message
               </h3>
 
-              <div className="relative mt-7 grid gap-4 sm:grid-cols-2">
+              <div className="relative mt-7 grid gap-5 sm:grid-cols-2">
                 <Field name="name" label="Your name" placeholder="Jane Doe" required />
                 <Field name="email" label="Email address" type="email" placeholder="jane@company.com" required />
                 <Field name="company" label="Company" placeholder="Optional" />
                 <SelectField name="subject" label="Subject" options={contact.subjects ?? []} />
               </div>
 
-              <div className="relative mt-4">
+              <div className="relative mt-5">
                 <TextareaField name="message" label="Your message" placeholder="Tell me about the project..." required />
               </div>
 
@@ -201,9 +201,20 @@ function Globe2Fallback(props: React.SVGProps<SVGSVGElement>) {
 }
 
 const fieldClass =
-  "peer w-full rounded-xl border border-white/[0.09] bg-ink/60 px-4 pb-2.5 pt-6 text-sm text-white outline-none transition-colors duration-300 placeholder:text-transparent focus:border-[var(--accent)]/60 focus:bg-ink/80";
-const labelClass =
-  "pointer-events-none absolute left-4 top-2 font-mono text-[10px] uppercase tracking-[0.16em] text-mute-soft transition-all duration-200 peer-placeholder-shown:top-4 peer-placeholder-shown:text-xs peer-placeholder-shown:tracking-normal peer-placeholder-shown:normal-case peer-focus:top-2 peer-focus:text-[10px] peer-focus:uppercase peer-focus:tracking-[0.16em] peer-focus:text-[var(--accent)]";
+  "w-full rounded-xl border border-white/[0.09] bg-ink/60 px-4 py-3 text-sm text-white outline-none transition-colors duration-300 focus:border-[var(--accent)]/60 focus:bg-ink/80";
+
+/** Label sits above the control - never on top of the placeholder. */
+function FieldLabel({ htmlFor, children, required }: { htmlFor: string; children: string; required?: boolean }) {
+  return (
+    <label
+      htmlFor={htmlFor}
+      className="mb-2 block font-mono text-[10px] uppercase tracking-[0.16em] text-mute-soft"
+    >
+      {children}
+      {required ? <span className="ml-1 text-[var(--accent)]">*</span> : null}
+    </label>
+  );
+}
 
 function Field({
   name,
@@ -219,12 +230,11 @@ function Field({
   required?: boolean;
 }) {
   return (
-    <div className="relative">
-      <input id={name} name={name} type={type} placeholder={placeholder ?? label} required={required} className={fieldClass} />
-      <label htmlFor={name} className={labelClass}>
+    <div>
+      <FieldLabel htmlFor={name} required={required}>
         {label}
-        {required ? " *" : ""}
-      </label>
+      </FieldLabel>
+      <input id={name} name={name} type={type} placeholder={placeholder} required={required} className={fieldClass} />
     </div>
   );
 }
@@ -241,25 +251,29 @@ function TextareaField({
   required?: boolean;
 }) {
   return (
-    <div className="relative">
+    <div>
+      <FieldLabel htmlFor={name} required={required}>
+        {label}
+      </FieldLabel>
       <textarea
         id={name}
         name={name}
         rows={5}
-        placeholder={placeholder ?? label}
+        placeholder={placeholder}
         required={required}
-        className={`${fieldClass} resize-none`}
+        className={`${fieldClass} resize-y`}
       />
-      <label htmlFor={name} className={labelClass}>
-        {label}
-        {required ? " *" : ""}
-      </label>
     </div>
   );
 }
 
 function SelectField({ name, label, options }: { name: string; label: string; options: string[] }) {
-  return <Select name={name} label={label} options={options} placeholder="Choose one" />;
+  return (
+    <div>
+      <FieldLabel htmlFor={`${name}-select`}>{label}</FieldLabel>
+      <Select name={name} options={options} placeholder="Choose one" />
+    </div>
+  );
 }
 
 export function Footer({
@@ -276,7 +290,7 @@ export function Footer({
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <div className="flex flex-wrap items-end justify-between gap-8 pb-12">
           <div>
-            <h2 className="font-display text-[clamp(2.4rem,9vw,6rem)] leading-none tracking-tight text-white/[0.09] outline-text">
+            <h2 className="font-display text-[clamp(2.4rem,9vw,6rem)] leading-none tracking-tight text-chalk/[0.09] outline-text">
               {name}
             </h2>
             {footer.note ? <p className="mt-4 max-w-md text-sm text-mute">{footer.note}</p> : null}

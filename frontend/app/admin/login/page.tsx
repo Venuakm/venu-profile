@@ -42,6 +42,7 @@ export default function AdminLoginPage() {
   const [maskedEmail, setMaskedEmail] = useState("");
   const [code, setCode] = useState("");
   const [cooldown, setCooldown] = useState(0);
+  const [devCode, setDevCode] = useState("");
 
   useEffect(() => {
     if (!loading && admin) router.replace("/admin");
@@ -76,10 +77,11 @@ export default function AdminLoginPage() {
     setError("");
     setSubmitting(true);
     try {
-      const result = await api<{ maskedEmail?: string }>("/api/auth/otp/request", {
+      const result = await api<{ maskedEmail?: string; devCode?: string }>("/api/auth/otp/request", {
         json: { identifier },
       });
       setMaskedEmail(result.maskedEmail ?? "your email");
+      setDevCode(result.devCode ?? "");
       setCodeSent(true);
       setCode("");
       setCooldown(45);
@@ -306,6 +308,8 @@ export default function AdminLoginPage() {
                   </p>
                 </div>
 
+                {devCode ? <DevCodeNote code={devCode} /> : null}
+
                 <OtpInput value={code} onChange={setCode} onComplete={verifyCode} disabled={submitting} />
 
                 {error ? <ErrorNote message={error} /> : null}
@@ -376,6 +380,18 @@ function Field({
         />
       </span>
     </label>
+  );
+}
+
+/** Shown only when the server could not email the code (no SMTP configured). */
+function DevCodeNote({ code }: { code: string }) {
+  return (
+    <div className="rounded-xl border border-amber-500/30 bg-amber-500/[0.07] px-4 py-3">
+      <p className="text-[11px] leading-snug text-white/80">
+        Email is not configured, so the code could not be sent. Development code:
+      </p>
+      <p className="mt-1.5 font-mono text-xl tracking-[0.3em] text-amber-300">{code}</p>
+    </div>
   );
 }
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
+import { Scene3D } from "./scene-3d";
 
 type LenisInstance = {
   raf: (time: number) => void;
@@ -170,15 +171,17 @@ export function AmbientBackground() {
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
       <div className="absolute inset-0 grid-lines" />
 
+      <Scene3D />
+
       <motion.div
         className="absolute -left-40 top-[-10%] h-[38rem] w-[38rem] rounded-full blur-[130px]"
-        style={{ background: "radial-gradient(circle, color-mix(in srgb, var(--accent) 26%, transparent), transparent 70%)" }}
+        style={{ background: "var(--orb-accent)" }}
         animate={{ x: [0, 90, -40, 0], y: [0, 60, 120, 0], scale: [1, 1.12, 0.95, 1] }}
         transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute right-[-12%] top-[35%] h-[32rem] w-[32rem] rounded-full blur-[140px]"
-        style={{ background: "radial-gradient(circle, rgba(90,120,255,.18), transparent 70%)" }}
+        style={{ background: "var(--orb-cool)" }}
         animate={{ x: [0, -70, 30, 0], y: [0, -80, 40, 0], scale: [1, 0.9, 1.15, 1] }}
         transition={{ duration: 32, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -198,9 +201,10 @@ export function AmbientBackground() {
 
       <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[var(--accent)]/[0.05] to-transparent" />
       <div
-        className="absolute inset-x-0 h-40 opacity-[0.07]"
+        className="absolute inset-x-0 h-40"
         style={{
           background: "linear-gradient(180deg, transparent, var(--accent), transparent)",
+          opacity: "var(--scan-opacity)",
           animation: "scan 9s linear infinite",
         }}
       />

@@ -244,6 +244,7 @@ function SecureAction({
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [cooldown, setCooldown] = useState(0);
+  const [devCode, setDevCode] = useState("");
 
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -256,7 +257,8 @@ function SecureAction({
   async function sendCode() {
     setBusy(true);
     try {
-      await api("/api/auth/otp/challenge", { json: { purpose } });
+      const result = await api<{ devCode?: string }>("/api/auth/otp/challenge", { json: { purpose } });
+      setDevCode(result.devCode ?? "");
       setStage("verify");
       setCode("");
       setCooldown(45);
@@ -335,6 +337,13 @@ function SecureAction({
                 Code sent to <span className="font-medium">{deliversTo || "your email"}</span> - valid for 10 minutes.
               </p>
             </div>
+
+            {devCode ? (
+              <div className="rounded-xl border border-amber-500/30 bg-amber-500/[0.07] px-4 py-3">
+                <p className="text-[11px] leading-snug text-white/80">Email is not configured. Development code:</p>
+                <p className="mt-1.5 font-mono text-xl tracking-[0.3em] text-amber-300">{devCode}</p>
+              </div>
+            ) : null}
 
             <OtpInput value={code} onChange={setCode} onComplete={confirm} disabled={busy} />
 

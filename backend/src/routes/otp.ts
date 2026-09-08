@@ -56,7 +56,7 @@ export async function otpRoutes(app: FastifyInstance) {
         return reply.code(423).send({ error: "Account is temporarily locked. Try again shortly." });
       }
 
-      await issueOtp(admin, "login", {
+      const issued = await issueOtp(admin, "login", {
         ip: request.ip,
         userAgent: String(request.headers["user-agent"] ?? ""),
       });
@@ -67,7 +67,7 @@ export async function otpRoutes(app: FastifyInstance) {
         body: `A one-time code was emailed after a request from ${request.ip}.`,
       });
 
-      return generic;
+      return { ...generic, devCode: issued.devCode };
     }
   );
 
@@ -141,12 +141,12 @@ export async function otpRoutes(app: FastifyInstance) {
       const admin = await Admin.findById(request.admin!.id);
       if (!admin) return reply.code(404).send({ error: "Account not found" });
 
-      await issueOtp(admin, parsed.data.purpose, {
+      const issued = await issueOtp(admin, parsed.data.purpose, {
         ip: request.ip,
         userAgent: String(request.headers["user-agent"] ?? ""),
       });
 
-      return { ok: true, maskedEmail: maskEmail(admin.email), expiresInMinutes: 10 };
+      return { ok: true, maskedEmail: maskEmail(admin.email), expiresInMinutes: 10, devCode: issued.devCode };
     }
   );
 

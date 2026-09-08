@@ -5,10 +5,10 @@ let transporter: Transporter | null = null;
 let warned = false;
 
 function getTransporter(): Transporter | null {
-  if (!env.smtp.host || !env.smtp.user) {
+  if (!env.smtp.host || !env.smtp.user || !env.smtp.pass) {
     if (!warned) {
       warned = true;
-      console.warn("[mail] SMTP is not configured - emails are logged to the console instead of sent.");
+      console.warn("[mail] SMTP is not fully configured (host, user and pass are all required) - emails are logged to the console instead of sent.");
     }
     return null;
   }

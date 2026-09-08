@@ -221,30 +221,51 @@ export function Counter({ value, duration = 1.6 }: { value: string; duration?: n
   return <span ref={ref}>{target === 0 ? value : display}</span>;
 }
 
-/** Infinite horizontal ticker. */
+/**
+ * Infinite horizontal ticker.
+ *
+ * Each item is a bordered chip rather than low-opacity text, so it stays legible
+ * over the animated background in both themes. The row fades out at both edges
+ * instead of being hard-clipped, and pauses when hovered so items can be read.
+ */
 export function Marquee({
   items,
   className,
   reverse = false,
+  speed = 4.5,
 }: {
   items: string[];
   className?: string;
   reverse?: boolean;
+  speed?: number;
 }) {
+  const [paused, setPaused] = useState(false);
   const doubled = [...items, ...items];
+
   return (
-    <div className={cn("relative flex overflow-hidden", className)}>
+    <div
+      className={cn("group relative flex overflow-hidden", className)}
+      style={{
+        maskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)",
+        WebkitMaskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)",
+      }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <div
-        className="flex shrink-0 items-center gap-10 whitespace-nowrap will-change-transform"
+        className="flex shrink-0 items-center gap-4 whitespace-nowrap will-change-transform"
         style={{
-          animation: `marquee ${items.length * 4.5}s linear infinite`,
+          animation: `marquee ${items.length * speed}s linear infinite`,
           animationDirection: reverse ? "reverse" : "normal",
+          animationPlayState: paused ? "paused" : "running",
         }}
       >
         {doubled.map((item, index) => (
-          <span key={`${item}-${index}`} className="flex items-center gap-10">
-            <span className="font-display text-2xl uppercase tracking-wide text-white/25 sm:text-3xl">{item}</span>
-            <span className="h-1.5 w-1.5 rotate-45 bg-[var(--accent)]" />
+          <span key={`${item}-${index}`} className="flex items-center gap-4">
+            <span className="rounded-full border border-line-strong bg-surface-2/60 px-5 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-chalk/80 backdrop-blur-sm transition-colors duration-300 hover:border-[var(--accent)]/60 hover:text-chalk sm:text-xs">
+              {item}
+            </span>
+            <span className="h-1 w-1 rotate-45 bg-[var(--accent)]" />
           </span>
         ))}
       </div>
