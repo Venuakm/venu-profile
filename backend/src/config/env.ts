@@ -46,7 +46,8 @@ export const env = {
     port: Number(process.env.SMTP_PORT ?? 587),
     secure: process.env.SMTP_SECURE === "true",
     user: process.env.SMTP_USER ?? "",
-    pass: process.env.SMTP_PASS ?? "",
+    // Gmail displays app passwords in four spaced groups, but rejects the spaces.
+    pass: (process.env.SMTP_PASS ?? "").replace(/\s+/g, ""),
     from: process.env.MAIL_FROM ?? "Venu Portfolio <no-reply@venu.dev>",
     to: process.env.MAIL_TO ?? process.env.ADMIN_EMAIL ?? "venuakkamgari@gmail.com",
   },
