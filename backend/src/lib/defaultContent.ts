@@ -1,0 +1,347 @@
+/**
+ * Seed copy for the site. Everything here is editable from the admin dashboard;
+ * this is only the starting point written into MongoDB on first boot.
+ */
+export const defaultContent = {
+  meta: {
+    title: "Venu Akkamgari - Full Stack Developer",
+    description:
+      "Full Stack Developer building fast, large-scale commerce platforms with Next.js, Node.js and MongoDB. NIT Uttarakhand CSE.",
+    keywords: ["Full Stack Developer", "Next.js", "React", "Node.js", "MongoDB", "ONDC", "Venu Akkamgari"],
+    ogImage: "/placeholders/og.svg",
+  },
+  theme: {
+    accent: "#e11d2a",
+    accentGlow: "#ff2b3d",
+    background: "#07080b",
+    surface: "#0d0f14",
+    grain: true,
+    cursorGlow: true,
+    animatedBackground: true,
+  },
+  nav: {
+    logoText: "VENU",
+    logoMark: "V",
+    links: [
+      { label: "Home", href: "#home" },
+      { label: "About", href: "#about" },
+      { label: "Experience", href: "#experience" },
+      { label: "Work", href: "#work" },
+      { label: "Skills", href: "#skills" },
+      { label: "Contact", href: "#contact" },
+    ],
+    adminLabel: "I'MU",
+  },
+  hero: {
+    kicker: "Full Stack Developer",
+    firstName: "VENU",
+    lastName: "AKKAMGARI",
+    roleRotation: [
+      "Full Stack Developer",
+      "Next.js Specialist",
+      "Backend Architect",
+      "ONDC Platform Engineer",
+    ],
+    tagline:
+      "I build commerce platforms that stay fast when the catalogue hits six figures - from ONDC protocol plumbing to interfaces people actually enjoy using.",
+    availability: { open: true, label: "Available for select work" },
+    location: "India - Remote friendly",
+    primaryCta: { label: "View my work", href: "#work" },
+    secondaryCta: { label: "Get in touch", href: "#contact" },
+    portrait: "/placeholders/portrait.svg",
+    resumeUrl: "",
+    stats: [
+      { value: "60", suffix: "x", label: "Faster catalogue uploads" },
+      { value: "26", suffix: "+", label: "Logistics providers integrated" },
+      { value: "400", suffix: "+", label: "DSA problems solved" },
+      { value: "85", suffix: "+", label: "Lighthouse score shipped" },
+    ],
+  },
+  about: {
+    kicker: "About",
+    heading: "Engineering that survives real traffic",
+    portrait: "/placeholders/about.svg",
+    paragraphs: [
+      "I'm Venu, a Full Stack Developer and NIT Uttarakhand Computer Science graduate. I spend most of my time in the messy middle of commerce systems - catalogue pipelines, protocol integrations and the queue workers nobody sees but everybody depends on.",
+      "At ZestFindz I'm building the marketplace end to end: customer storefront, seller console and admin control plane. Before that, at KAS Commerce, I led MySELLerCENTRAL - a seller platform on the ONDC network - where a bulk XLSX upload pipeline I designed cut listing time by 60x.",
+      "I care about the details that make software feel considered: a form that explains itself, a page that settles in under a second, an animation that guides instead of distracts.",
+    ],
+    highlights: [
+      "Queue-based parallel processing for high-volume catalogue data",
+      "ONDC protocol APIs - /search, /select, /confirm end to end",
+      "Role-based access control with zero data breaches across 1,200+ updates",
+      "Cron-driven synchronisation keeping systems near real-time",
+    ],
+  },
+  experience: {
+    kicker: "Experience",
+    heading: "Where I've been building",
+    items: [
+      {
+        id: "zestfindz",
+        company: "ZestFindz",
+        role: "Full Stack Developer",
+        period: "Dec 2025 - Present",
+        current: true,
+        location: "India",
+        summary:
+          "Building a multi-sided commerce platform - customer storefront, seller console and admin control plane - on a single Next.js and Node.js codebase.",
+        stack: ["Next.js", "TypeScript", "Node.js", "MongoDB", "PostgreSQL", "Docker", "Redis"],
+        bullets: [
+          "Architected the customer, seller and admin surfaces as independent Next.js apps sharing a typed API layer and design system.",
+          "Built the catalogue and inventory core with bulk import, validation and category-aware attribute handling.",
+          "Containerised the full stack with Docker Compose so the entire platform boots with one command in any environment.",
+          "Implemented notification and messaging flows connecting buyers, sellers and operations in near real-time.",
+        ],
+        logo: "/placeholders/logo-zestfindz.svg",
+        link: "",
+      },
+      {
+        id: "kas-commerce",
+        company: "KAS Commerce",
+        role: "Full Stack Developer",
+        period: "May 2025 - Nov 2025",
+        current: false,
+        location: "India",
+        summary:
+          "Led MySELLerCENTRAL, a seller-facing platform giving ONDC merchants full catalogue and inventory control.",
+        stack: ["Next.js", "React", "TailwindCSS", "Node.js", "Express.js", "MongoDB", "PostgreSQL", "ONDC APIs"],
+        bullets: [
+          "Spearheaded MySELLerCENTRAL, empowering sellers on the ONDC network with comprehensive catalogue and inventory management.",
+          "Integrated ONDC logistics, aggregating 26+ providers to surface the cheapest and fastest delivery option per order.",
+          "Designed a bulk XLSX/CSV product upload with deep validation, accelerating listing velocity by 60x for non-technical users.",
+          "Optimised backend services with queue-based parallel processing to handle large-volume catalogue data.",
+          "Integrated critical ONDC protocol APIs (/search, /select, /confirm) for end-to-end buyer-seller interactions.",
+          "Improved user experience by 80% with a dynamic, conditional form UI for category-specific product creation.",
+          "Automated data synchronisation through cron jobs, keeping the system near real-time and accurate.",
+        ],
+        logo: "/placeholders/logo-kas.svg",
+        link: "",
+      },
+      {
+        id: "boostopia",
+        company: "Boostopia",
+        role: "MERN Stack Developer",
+        period: "Jan 2024 - Jun 2024",
+        current: false,
+        location: "Remote",
+        summary:
+          "Built a services marketplace from scratch connecting professionals and influencers with paying clients.",
+        stack: ["Next.js", "React", "Tailwind CSS", "Express.js", "Node.js", "MongoDB"],
+        bullets: [
+          "Architected Boostopia from zero - a full-stack MERN app enabling 150+ professionals to offer services and closing 40+ paid collaborations.",
+          "Integrated Instagram, LinkedIn and Spotify to auto-populate profiles, lifting completion rates by 40% and cutting manual input by 60%.",
+          "Delivered a responsive, accessible UI scoring 85+ on Lighthouse and improving mobile usability feedback by 30%.",
+          "Implemented role-based access control and CRUD flows across 1,200+ profile and service updates with zero data breaches.",
+          "Worked in an Agile team of 4 across 15+ sprints and 30+ code reviews, reducing production bugs by 20%.",
+        ],
+        logo: "/placeholders/logo-boostopia.svg",
+        link: "",
+      },
+    ],
+  },
+  work: {
+    kicker: "Selected work",
+    heading: "Things I've shipped",
+    subheading: "A few builds that show how I think about scale, data and interface.",
+  },
+  skills: {
+    kicker: "Capabilities",
+    heading: "The toolkit",
+    groups: [
+      {
+        title: "Languages",
+        items: [
+          { name: "JavaScript", level: 95 },
+          { name: "TypeScript", level: 90 },
+          { name: "Java", level: 75 },
+          { name: "C++", level: 80 },
+          { name: "SQL", level: 82 },
+          { name: "HTML / CSS", level: 95 },
+        ],
+      },
+      {
+        title: "Frontend",
+        items: [
+          { name: "Next.js", level: 94 },
+          { name: "React", level: 94 },
+          { name: "Redux", level: 85 },
+          { name: "Tailwind CSS", level: 92 },
+          { name: "Framer Motion", level: 84 },
+          { name: "Bootstrap", level: 78 },
+        ],
+      },
+      {
+        title: "Backend & Data",
+        items: [
+          { name: "Node.js", level: 92 },
+          { name: "Express.js", level: 90 },
+          { name: "Fastify", level: 82 },
+          { name: "MongoDB", level: 90 },
+          { name: "PostgreSQL", level: 80 },
+          { name: "ONDC APIs", level: 88 },
+        ],
+      },
+      {
+        title: "Tooling",
+        items: [
+          { name: "Git & GitHub", level: 92 },
+          { name: "Docker", level: 80 },
+          { name: "Postman", level: 88 },
+          { name: "Netlify", level: 82 },
+          { name: "Render", level: 82 },
+          { name: "Thunder Client", level: 80 },
+        ],
+      },
+    ],
+  },
+  education: {
+    kicker: "Education",
+    heading: "Foundation",
+    items: [
+      {
+        school: "NIT Uttarakhand",
+        degree: "B.Tech, Computer Science & Engineering",
+        period: "Graduated Jun 2023",
+        detail:
+          "Coursework: Data Structures & Program Design, Design and Analysis of Algorithms, Database Management Systems, Operating Systems, Object Oriented Methodology.",
+      },
+    ],
+    achievements: [
+      "Master League badge on Coding Ninjas for C++ and problem solving",
+      "400+ problems solved across competitive programming platforms",
+      "85+ Lighthouse performance score on production applications",
+    ],
+  },
+  contact: {
+    kicker: "Contact",
+    heading: "Let's build something",
+    subheading:
+      "Have a product that needs to scale, or a platform that needs rescuing? Tell me about it - I reply within 24 hours.",
+    email: "venuakkamgari@gmail.com",
+    phone: "+91 6304888569",
+    location: "India - open to remote",
+    responseTime: "Usually replies within 24 hours",
+    availability: "Open to full-time roles and select freelance work",
+    formNote: "Your details are stored securely and never shared.",
+    subjects: ["Full-time role", "Freelance project", "Collaboration", "Just saying hi"],
+  },
+  socials: [
+    { label: "GitHub", url: "https://github.com/Govagit007", icon: "github" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/venu", icon: "linkedin" },
+    { label: "LeetCode", url: "https://leetcode.com/vbakkamgari1", icon: "code" },
+    { label: "Email", url: "mailto:venuakkamgari@gmail.com", icon: "mail" },
+  ],
+  footer: {
+    note: "Designed and built from scratch - Next.js, Fastify, MongoDB.",
+    copyright: "Venu Akkamgari",
+    backToTop: "Back to top",
+  },
+};
+
+export const defaultProjects = [
+  {
+    title: "MySELLerCENTRAL",
+    slug: "mysellercentral",
+    tagline: "Seller command centre for the ONDC network",
+    summary:
+      "A seller-facing platform giving ONDC merchants complete catalogue, inventory and logistics control from one console.",
+    description:
+      "MySELLerCENTRAL is the platform I led at KAS Commerce. It gives merchants on the ONDC network a single console for catalogue management, inventory, pricing and fulfilment.\n\nThe hardest problem was onboarding: sellers arrive with thousands of SKUs in spreadsheets of wildly varying quality. I designed a bulk XLSX/CSV pipeline with per-row validation and category-aware attribute mapping that took listing velocity up 60x, then moved the heavy work onto queue-based parallel workers so a 50,000-row upload never blocks the request cycle.\n\nOn the protocol side I integrated the core ONDC APIs - /search, /select and /confirm - plus a logistics aggregation layer spanning 26+ providers that surfaces the cheapest and fastest option per order.",
+    cover: "/placeholders/project-1.svg",
+    gallery: ["/placeholders/project-1.svg"],
+    tags: ["Commerce", "ONDC", "B2B"],
+    stack: ["Next.js", "React", "TailwindCSS", "Node.js", "Express.js", "MongoDB", "PostgreSQL"],
+    role: "Lead Full Stack Developer",
+    year: "2025",
+    metrics: [
+      { label: "Listing velocity", value: "60x faster" },
+      { label: "Logistics providers", value: "26+" },
+      { label: "UX improvement", value: "80%" },
+    ],
+    links: { live: "", github: "", caseStudy: "" },
+    featured: true,
+    order: 1,
+  },
+  {
+    title: "ZestFindz",
+    slug: "zestfindz",
+    tagline: "A three-sided marketplace, built end to end",
+    summary:
+      "Customer storefront, seller console and admin control plane sharing one typed API and design system.",
+    description:
+      "ZestFindz is the platform I'm building now. It runs as three Next.js applications - storefront, seller console and admin control plane - over a shared typed API layer, all containerised so the whole stack comes up with a single command.\n\nMy focus has been the catalogue core: bulk import, category-aware attributes, validation that explains itself to non-technical sellers, and the notification flows that keep buyers, sellers and operations in sync.",
+    cover: "/placeholders/project-2.svg",
+    gallery: ["/placeholders/project-2.svg"],
+    tags: ["Marketplace", "Commerce", "Platform"],
+    stack: ["Next.js", "TypeScript", "Node.js", "MongoDB", "PostgreSQL", "Docker", "Redis"],
+    role: "Full Stack Developer",
+    year: "2026",
+    metrics: [
+      { label: "Surfaces", value: "3 apps" },
+      { label: "Boot time", value: "1 command" },
+    ],
+    links: { live: "", github: "", caseStudy: "" },
+    featured: true,
+    order: 2,
+  },
+  {
+    title: "Boostopia",
+    slug: "boostopia",
+    tagline: "Where creators sell what they're good at",
+    summary:
+      "A MERN services marketplace connecting 150+ professionals and influencers with paying clients.",
+    description:
+      "Boostopia was built from an empty repository into a working marketplace with 150+ professionals onboarded and 40+ paid collaborations closed.\n\nProfile completion was the growth bottleneck, so I integrated Instagram, LinkedIn and Spotify to auto-populate profiles - completion rates rose 40% and manual input time dropped 60%. Role-based access control governs every write path, with 1,200+ profile and service updates handled and zero data breaches.",
+    cover: "/placeholders/project-3.svg",
+    gallery: ["/placeholders/project-3.svg"],
+    tags: ["Marketplace", "Creators", "MERN"],
+    stack: ["Next.js", "React", "Tailwind CSS", "Express.js", "Node.js", "MongoDB"],
+    role: "MERN Stack Developer",
+    year: "2024",
+    metrics: [
+      { label: "Professionals", value: "150+" },
+      { label: "Collaborations", value: "40+" },
+      { label: "Lighthouse", value: "85+" },
+    ],
+    links: { live: "", github: "", caseStudy: "" },
+    featured: true,
+    order: 3,
+  },
+  {
+    title: "ESHOP",
+    slug: "eshop",
+    tagline: "A full commerce flow, from cart to confirmation",
+    summary: "MERN storefront with cart, checkout, orders and an admin catalogue.",
+    description:
+      "A complete commerce build covering product browsing, cart, checkout, order history and an admin catalogue, backed by Redux state and a MongoDB data layer.",
+    cover: "/placeholders/project-4.svg",
+    gallery: ["/placeholders/project-4.svg"],
+    tags: ["Commerce", "Side project"],
+    stack: ["React", "Redux", "Tailwind", "Material UI", "Express.js", "Node.js", "MongoDB"],
+    role: "Solo build",
+    year: "2023",
+    metrics: [],
+    links: { live: "", github: "https://github.com/Govagit007", caseStudy: "" },
+    featured: false,
+    order: 4,
+  },
+  {
+    title: "Note-Zipper",
+    slug: "note-zipper",
+    tagline: "Notes that stay out of your way",
+    summary: "Authenticated note-taking app with search, markdown and instant sync.",
+    description:
+      "A focused note-taking application with authentication, full-text search and markdown support, deployed across Netlify and Render.",
+    cover: "/placeholders/project-5.svg",
+    gallery: ["/placeholders/project-5.svg"],
+    tags: ["Productivity", "Side project"],
+    stack: ["React", "Redux", "Bootstrap", "Express", "MongoDB"],
+    role: "Solo build",
+    year: "2023",
+    metrics: [],
+    links: { live: "", github: "https://github.com/Govagit007", caseStudy: "" },
+    featured: false,
+    order: 5,
+  },
+];

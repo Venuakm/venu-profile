@@ -1,0 +1,270 @@
+@import "tailwindcss";
+
+/* -------------------------------------------------------------------------
+   Palette. Every colour is a variable so the light/dark switch only has to
+   swap the values, never the components.
+   ------------------------------------------------------------------------- */
+:root,
+:root.dark {
+  color-scheme: dark;
+
+  --c-ink: #07080b;
+  --c-ink-soft: #0b0d12;
+  --c-surface: #0e1015;
+  --c-surface-2: #14161d;
+  --c-line: rgba(255, 255, 255, 0.08);
+  --c-line-strong: rgba(255, 255, 255, 0.16);
+  --c-mute: #8a8f9c;
+  --c-mute-soft: #6b7080;
+  --c-chalk: #eceef2;
+
+  --glass-bg: linear-gradient(140deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.014));
+  --glass-bg-strong: linear-gradient(140deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025));
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-border-strong: rgba(255, 255, 255, 0.12);
+
+  --grid-line: rgba(255, 255, 255, 0.035);
+  --outline-stroke: rgba(255, 255, 255, 0.28);
+  --noise-opacity: 0.035;
+  --scrollbar-track: #0a0b0f;
+
+  --accent: #e11d2a;
+  --accent-soft: #ff2b3d;
+}
+
+:root.light {
+  color-scheme: light;
+
+  --c-ink: #f5f6f8;
+  --c-ink-soft: #ffffff;
+  --c-surface: #ffffff;
+  --c-surface-2: #eef0f4;
+  --c-line: rgba(10, 12, 20, 0.1);
+  --c-line-strong: rgba(10, 12, 20, 0.2);
+  --c-mute: #575d6b;
+  --c-mute-soft: #7b8191;
+  --c-chalk: #101319;
+
+  --glass-bg: linear-gradient(140deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.55));
+  --glass-bg-strong: linear-gradient(140deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.72));
+  --glass-border: rgba(10, 12, 20, 0.09);
+  --glass-border-strong: rgba(10, 12, 20, 0.14);
+
+  --grid-line: rgba(10, 12, 20, 0.05);
+  --outline-stroke: rgba(10, 12, 20, 0.22);
+  --noise-opacity: 0.02;
+  --scrollbar-track: #e8eaef;
+}
+
+@theme inline {
+  --color-ink: var(--c-ink);
+  --color-ink-soft: var(--c-ink-soft);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+  --color-mute: var(--c-mute);
+  --color-mute-soft: var(--c-mute-soft);
+  --color-chalk: var(--c-chalk);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+
+  --font-display: var(--font-display), "Arial Black", sans-serif;
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-22px) rotate(6deg); }
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.85); opacity: 0.7; }
+  70%, 100% { transform: scale(1.6); opacity: 0; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+* {
+  border-color: var(--c-line);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--c-ink);
+  color: var(--c-chalk);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 70%, transparent);
+  color: #fff;
+}
+
+/* Scrollbar ------------------------------------------------------------- */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 80%, transparent), var(--c-mute-soft));
+  border-radius: 99px;
+  border: 2px solid var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* Utilities -------------------------------------------------------------- */
+@utility glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid var(--glass-border);
+}
+
+@utility glass-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(26px) saturate(160%);
+  -webkit-backdrop-filter: blur(26px) saturate(160%);
+  border: 1px solid var(--glass-border-strong);
+}
+
+@utility accent-glow {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent),
+    0 18px 60px -18px color-mix(in srgb, var(--accent) 65%, transparent);
+}
+
+@utility text-glow {
+  text-shadow: 0 0 32px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.gradient-text {
+  background: linear-gradient(120deg, var(--c-chalk) 0%, var(--c-chalk) 40%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--outline-stroke);
+}
+
+.noise::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: var(--noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.grid-lines {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+.shimmer {
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    color-mix(in srgb, var(--accent) 26%, transparent) 45%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.4s linear infinite;
+}
+
+/*
+ * The site was designed dark-first with white-tinted surfaces. In light mode
+ * those same utility classes need to tint dark instead, so the translucent
+ * white layers are remapped rather than rewritten on every element.
+ */
+:root.light .bg-white\/\[0\.02\],
+:root.light .bg-white\/\[0\.022\],
+:root.light .bg-white\/\[0\.025\],
+:root.light .bg-white\/\[0\.03\] {
+  background-color: rgba(10, 12, 20, 0.025);
+}
+:root.light .bg-white\/\[0\.035\],
+:root.light .bg-white\/\[0\.04\],
+:root.light .bg-white\/\[0\.045\],
+:root.light .bg-white\/\[0\.05\],
+:root.light .bg-white\/\[0\.06\] {
+  background-color: rgba(10, 12, 20, 0.05);
+}
+:root.light .bg-white\/\[0\.1\],
+:root.light .bg-white\/10,
+:root.light .bg-white\/15 {
+  background-color: rgba(10, 12, 20, 0.1);
+}
+:root.light .border-white\/\[0\.05\],
+:root.light .border-white\/\[0\.07\],
+:root.light .border-white\/\[0\.08\],
+:root.light .border-white\/\[0\.09\],
+:root.light .border-white\/\[0\.1\],
+:root.light .border-white\/10,
+:root.light .border-white\/12 {
+  border-color: rgba(10, 12, 20, 0.11);
+}
+:root.light .border-white\/\[0\.16\],
+:root.light .border-white\/\[0\.18\],
+:root.light .border-white\/15,
+:root.light .border-white\/25,
+:root.light .border-white\/30,
+:root.light .border-white\/40 {
+  border-color: rgba(10, 12, 20, 0.2);
+}
+:root.light .text-white,
+:root.light .text-white\/90,
+:root.light .text-white\/85,
+:root.light .text-white\/80,
+:root.light .text-white\/75,
+:root.light .text-white\/70 {
+  color: var(--c-chalk);
+}
+:root.light .text-white\/55,
+:root.light .text-white\/60,
+:root.light .text-white\/65 {
+  color: var(--c-mute);
+}
+:root.light .bg-ink\/40,
+:root.light .bg-ink\/50,
+:root.light .bg-ink\/60,
+:root.light .bg-ink\/70,
+:root.light .bg-ink\/80 {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Rich text rendered from the admin editor */
+.prose-venu p { margin-bottom: 1.1rem; line-height: 1.8; color: var(--c-mute); }
+.prose-venu p:last-child { margin-bottom: 0; }
+.prose-venu strong { color: var(--c-chalk); font-weight: 600; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "venu-profile",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portfolio site for Venu Akkamgari - Next.js frontend, Fastify + MongoDB backend.",
+  "scripts": {
+    "dev": "concurrently -n api,web -c magenta,cyan \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "start": "concurrently -n api,web -c magenta,cyan \"npm --prefix backend run start\" \"npm --prefix frontend run start\"",
+    "seed": "npm --prefix backend run seed",
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "db:up": "docker start venu-profile-mongo || docker run -d --name venu-profile-mongo -p 27018:27017 -v venu-profile-mongo-data:/data/db --restart unless-stopped mongo:7",
+    "db:down": "docker stop venu-profile-mongo"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
+}
