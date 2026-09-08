@@ -53,8 +53,9 @@ export const defaultContent = {
     stats: [
       { value: "60", suffix: "x", label: "Faster catalogue uploads" },
       { value: "26", suffix: "+", label: "Logistics providers integrated" },
-      { value: "400", suffix: "+", label: "DSA problems solved" },
-      { value: "85", suffix: "+", label: "Lighthouse score shipped" },
+      { value: "80", suffix: "%", label: "Better seller onboarding UX" },
+      { value: "150", suffix: "+", label: "Professionals onboarded" },
+      { value: "1200", suffix: "+", label: "Records secured, zero breaches" },
     ],
   },
   about: {

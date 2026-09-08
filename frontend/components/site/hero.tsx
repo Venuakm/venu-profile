@@ -241,7 +241,7 @@ export function Hero({ hero, marquee }: { hero: SiteContent["hero"]; marquee: st
           transition={{ delay: 1.45, duration: 0.9, ease: EASE }}
           className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8"
         >
-          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.05] sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.05] sm:grid-cols-3 lg:grid-cols-5">
             {hero.stats.map((stat) => (
               <div key={stat.label} className="group bg-ink-soft/80 p-5 backdrop-blur-xl transition-colors duration-300 hover:bg-[var(--accent)]/[0.07] sm:p-6">
                 <div className="font-display text-3xl text-white sm:text-4xl">
