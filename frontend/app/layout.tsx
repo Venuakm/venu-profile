@@ -37,6 +37,11 @@ export const metadata: Metadata = {
     description:
       "Full Stack Developer building fast, large-scale commerce platforms with Next.js, Node.js and MongoDB.",
   },
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   robots: { index: true, follow: true },
 };
 
