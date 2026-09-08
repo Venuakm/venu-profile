@@ -14,6 +14,7 @@ import { env } from "./config/env.js";
 import { connectDbWithRetry, isDbReady } from "./db.js";
 import { requireCsrfHeader } from "./plugins/auth.js";
 import { authRoutes } from "./routes/auth.js";
+import { otpRoutes } from "./routes/otp.js";
 import { contentRoutes, getOrCreateContent } from "./routes/content.js";
 import { projectRoutes } from "./routes/projects.js";
 import { messageRoutes } from "./routes/messages.js";
@@ -99,6 +100,7 @@ async function main() {
   await app.register(
     async (api) => {
       await api.register(authRoutes, { prefix: "/auth" });
+      await api.register(otpRoutes, { prefix: "/auth" });
       await api.register(contentRoutes);
       await api.register(projectRoutes);
       await api.register(messageRoutes);

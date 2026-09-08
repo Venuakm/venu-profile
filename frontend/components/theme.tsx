@@ -11,16 +11,18 @@ const ThemeContext = createContext<{ theme: Theme; setTheme: (theme: Theme) => v
   null
 );
 
-/** Runs before paint so the page never flashes the wrong theme. */
-export const themeScript = `(function(){try{var t=localStorage.getItem('vp-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.classList.add(t);document.documentElement.style.colorScheme=t;}catch(e){document.documentElement.classList.add('dark');}})();`;
+/**
+ * Runs before paint so the page never flashes the wrong theme. Dark is the
+ * default for everyone - light is opt-in via the toggle, and only then is it
+ * remembered.
+ */
+export const themeScript = `(function(){try{var t=localStorage.getItem('vp-theme')==='light'?'light':'dark';document.documentElement.classList.add(t);document.documentElement.style.colorScheme=t;}catch(e){document.documentElement.classList.add('dark');}})();`;
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("dark");
 
   useEffect(() => {
-    const stored = (localStorage.getItem("vp-theme") as Theme | null) ?? null;
-    const system = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-    setThemeState(stored ?? system);
+    setThemeState(localStorage.getItem("vp-theme") === "light" ? "light" : "dark");
   }, []);
 
   const setTheme = useCallback((next: Theme) => {

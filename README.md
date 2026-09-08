@@ -72,6 +72,16 @@ npx tsx src/set-credentials.ts <username> <password>
 
 ## Security
 
+### Email one-time codes
+
+- Sign in with a password **or** with a 6-digit code emailed to the account address
+- Changing the username, password or account email each require the current password **plus** an emailed code
+- Codes are single-use, expire in 10 minutes, stored only as SHA-256 hashes, and die after five wrong guesses
+- Requesting a new code invalidates the previous one; every request and change raises a notification
+- Requesting a code never reveals whether an account exists
+
+### Sessions and accounts
+
 - bcrypt (cost 12) password hashing; the account locks after repeated failed sign-ins
 - Short-lived JWT access tokens in httpOnly cookies, with rotating refresh tokens stored as hashes
 - Reusing a revoked refresh token revokes every session and raises a critical notification
