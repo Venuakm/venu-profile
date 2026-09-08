@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import type { SiteContent } from "@/lib/types";
 import { api } from "@/lib/api";
+import { Select } from "@/components/ui/select";
 import { EASE, Magnetic, Reveal, SectionHeading } from "./primitives";
 
 const ICONS: Record<string, typeof Github> = {
@@ -258,26 +259,7 @@ function TextareaField({
 }
 
 function SelectField({ name, label, options }: { name: string; label: string; options: string[] }) {
-  return (
-    <div className="relative">
-      <select
-        id={name}
-        name={name}
-        defaultValue=""
-        className="w-full appearance-none rounded-xl border border-white/[0.09] bg-ink/60 px-4 pb-2.5 pt-6 text-sm text-white outline-none transition-colors duration-300 focus:border-[var(--accent)]/60"
-      >
-        <option value="">Choose one</option>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-      <span className="pointer-events-none absolute left-4 top-2 font-mono text-[10px] uppercase tracking-[0.16em] text-mute-soft">
-        {label}
-      </span>
-    </div>
-  );
+  return <Select name={name} label={label} options={options} placeholder="Choose one" />;
 }
 
 export function Footer({

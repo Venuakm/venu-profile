@@ -3,31 +3,85 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 
-/** Inertial scrolling for the whole page. */
-export function SmoothScroll() {
+type LenisInstance = {
+  raf: (time: number) => void;
+  destroy: () => void;
+  start: () => void;
+  stop: () => void;
+  scrollTo: (target: string | number | HTMLElement, options?: Record<string, unknown>) => void;
+};
+
+let activeLenis: LenisInstance | null = null;
+
+/** Pauses inertial scrolling while a full-screen overlay is open. */
+export function setScrollLocked(locked: boolean) {
+  if (locked) activeLenis?.stop();
+  else activeLenis?.start();
+}
+
+/**
+ * Inertial scrolling for the whole page.
+ *
+ * Lenis drives scrolling itself, so the CSS `scroll-behavior: smooth` has to be
+ * switched off while it runs - otherwise the two fight and the page stutters.
+ * In-page anchors are routed through Lenis as well, offset by the fixed header.
+ */
+export function SmoothScroll({ headerOffset = 90 }: { headerOffset?: number }) {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    let lenis: { raf: (t: number) => void; destroy: () => void } | null = null;
+    let lenis: LenisInstance | null = null;
     let frame = 0;
     let cancelled = false;
+    const root = document.documentElement;
+
+    const onAnchorClick = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey) return;
+      const anchor = (event.target as HTMLElement)?.closest?.("a");
+      const href = anchor?.getAttribute("href");
+      if (!anchor || !href?.startsWith("#") || href === "#") return;
+
+      const target = document.querySelector(href);
+      if (!target) return;
+
+      event.preventDefault();
+      lenis?.scrollTo(target as HTMLElement, { offset: -headerOffset, duration: 1.25 });
+      history.replaceState(null, "", href);
+    };
 
     void import("lenis").then(({ default: Lenis }) => {
       if (cancelled) return;
-      lenis = new Lenis({ duration: 1.05, smoothWheel: true, touchMultiplier: 1.6 });
+
+      root.style.scrollBehavior = "auto";
+      lenis = new Lenis({
+        duration: 1.1,
+        // Gentle exponential ease-out: quick response, soft landing.
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        touchMultiplier: 1.8,
+        syncTouch: false,
+      }) as unknown as LenisInstance;
+      activeLenis = lenis;
+
       const raf = (time: number) => {
         lenis?.raf(time);
         frame = requestAnimationFrame(raf);
       };
       frame = requestAnimationFrame(raf);
+
+      document.addEventListener("click", onAnchorClick);
     });
 
     return () => {
       cancelled = true;
       cancelAnimationFrame(frame);
+      document.removeEventListener("click", onAnchorClick);
       lenis?.destroy();
+      if (activeLenis === lenis) activeLenis = null;
+      root.style.scrollBehavior = "";
     };
-  }, []);
+  }, [headerOffset]);
 
   return null;
 }

@@ -8,6 +8,7 @@ import type { SiteContent } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { Magnetic, EASE } from "./primitives";
 import { ThemeToggle } from "@/components/theme";
+import { setScrollLocked } from "./chrome";
 
 export function Nav({ nav }: { nav: SiteContent["nav"] }) {
   const [scrolled, setScrolled] = useState(false);
@@ -38,8 +39,10 @@ export function Nav({ nav }: { nav: SiteContent["nav"] }) {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    setScrollLocked(open);
     return () => {
       document.body.style.overflow = "";
+      setScrollLocked(false);
     };
   }, [open]);
 

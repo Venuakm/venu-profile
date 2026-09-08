@@ -247,7 +247,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
                         Mark all read
                       </button>
                     </div>
-                    <div className="max-h-[380px] overflow-y-auto">
+                    <div data-lenis-prevent className="max-h-[380px] overflow-y-auto">
                       {notifications.length ? (
                         notifications.map((item) => (
                           <div

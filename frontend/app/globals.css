@@ -103,6 +103,21 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Lenis takes over scrolling on the public pages. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 body {
   background: var(--c-ink);
   color: var(--c-chalk);
@@ -251,6 +266,92 @@ body {
 :root.light .bg-ink\/70,
 :root.light .bg-ink\/80 {
   background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* -------------------------------------------------------------------------
+   Native form controls. These are drawn by the operating system by default,
+   which breaks the theme, so each one is rebuilt to match.
+   ------------------------------------------------------------------------- */
+select {
+  appearance: none;
+  background-color: var(--c-ink-soft);
+  color: var(--c-chalk);
+}
+select option {
+  background-color: var(--c-surface);
+  color: var(--c-chalk);
+}
+
+input[type="range"] {
+  appearance: none;
+  height: 4px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--c-chalk) 14%, transparent);
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--c-ink);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent);
+  transition: transform 0.15s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.18);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--c-ink);
+}
+
+input[type="color"] {
+  appearance: none;
+  cursor: pointer;
+  background: transparent;
+  padding: 3px;
+}
+input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 7px;
+}
+
+input[type="file"]::file-selector-button {
+  border: 1px solid var(--c-line);
+  background: var(--c-surface-2);
+  color: var(--c-chalk);
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+/* Chrome's autofill paints its own background - override it. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--c-chalk);
+  -webkit-box-shadow: 0 0 0 1000px var(--c-ink-soft) inset;
+  caret-color: var(--c-chalk);
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: color-mix(in srgb, var(--c-mute-soft) 75%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 60%, transparent);
+  outline-offset: 2px;
 }
 
 /* Rich text rendered from the admin editor */

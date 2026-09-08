@@ -452,7 +452,7 @@ export function Modal({
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <div className="max-h-[75vh] overflow-y-auto p-5">{children}</div>
+            <div data-lenis-prevent className="max-h-[75vh] overflow-y-auto p-5">{children}</div>
           </motion.div>
         </motion.div>
       ) : null}
