@@ -6,9 +6,10 @@ import type { SiteContent } from "./types";
  */
 export const fallbackContent: SiteContent = {
   meta: {
-    title: "Venu Akkamgari - Full Stack Developer",
-    description: "Full Stack Developer building fast, large-scale commerce platforms.",
-    keywords: ["Full Stack Developer"],
+    title: "Venu Akkamgari | Full Stack Developer",
+    description:
+      "Official website of Venu Akkamgari, Full Stack Developer and NIT Uttarakhand CSE graduate.",
+    keywords: ["Venu Akkamgari", "Venu Akkamgari portfolio", "Full Stack Developer"],
     ogImage: "/placeholders/og.svg",
   },
   theme: {

@@ -4,10 +4,22 @@
  */
 export const defaultContent = {
   meta: {
-    title: "Venu Akkamgari - Full Stack Developer",
+    title: "Venu Akkamgari | Full Stack Developer",
     description:
-      "Full Stack Developer building fast, large-scale commerce platforms with Next.js, Node.js and MongoDB. NIT Uttarakhand CSE.",
-    keywords: ["Full Stack Developer", "Next.js", "React", "Node.js", "MongoDB", "ONDC", "Venu Akkamgari"],
+      "Official website of Venu Akkamgari, Full Stack Developer and NIT Uttarakhand CSE graduate. Building commerce platforms with Next.js, Node.js, MongoDB and ONDC.",
+    keywords: [
+      "Venu Akkamgari",
+      "Venu Akkamgari portfolio",
+      "Venu Akkamgari developer",
+      "Akkamgari Venu",
+      "Full Stack Developer",
+      "Next.js",
+      "React",
+      "Node.js",
+      "MongoDB",
+      "ONDC",
+      "NIT Uttarakhand",
+    ],
     ogImage: "/placeholders/og.svg",
   },
   theme: {

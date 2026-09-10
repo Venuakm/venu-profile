@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, Github, Globe } from "lucide-react";
 import { fetchPublic } from "@/lib/api";
 import { fallbackContent } from "@/lib/fallback";
+import { absoluteUrl, displayName } from "@/lib/site";
 import type { Project, SiteContent } from "@/lib/types";
 import { Reveal, RevealText } from "@/components/site/primitives";
 import { AmbientBackground, CursorGlow, ScrollProgress, SmoothScroll } from "@/components/site/chrome";
@@ -22,12 +23,19 @@ async function getProject(slug: string) {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const { project } = await getProject(slug);
-  if (!project) return { title: "Project not found" };
+  const { project, content } = await getProject(slug);
+  if (!project) return { title: "Project not found", robots: { index: false, follow: false } };
+  const name = displayName(content.hero?.firstName, content.hero?.lastName);
+  const title = `${project.title} | ${name}`;
+  const description = project.summary;
+  const url = absoluteUrl(`/work/${project.slug}`);
+  const images = project.cover ? [absoluteUrl(project.cover)] : undefined;
   return {
-    title: project.title,
-    description: project.summary,
-    openGraph: { title: project.title, description: project.summary, images: [project.cover] },
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { title, description, url, images, type: "article" },
+    twitter: { card: "summary_large_image", title, description, images },
   };
 }
 

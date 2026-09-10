@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Anton, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import { ThemeProvider, themeScript } from "@/components/theme";
+import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const display = Anton({
@@ -24,25 +25,46 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(siteUrl()),
   title: {
-    default: "Venu Akkamgari - Full Stack Developer",
-    template: "%s - Venu Akkamgari",
+    default: "Venu Akkamgari | Full Stack Developer",
+    template: "%s | Venu Akkamgari",
   },
   description:
-    "Full Stack Developer building fast, large-scale commerce platforms with Next.js, Node.js and MongoDB.",
+    "Official website of Venu Akkamgari, Full Stack Developer and NIT Uttarakhand CSE graduate. Next.js, Node.js, MongoDB and ONDC commerce platforms.",
+  applicationName: "Venu Akkamgari",
+  authors: [{ name: "Venu Akkamgari", url: siteUrl() }],
+  creator: "Venu Akkamgari",
+  publisher: "Venu Akkamgari",
+  keywords: [
+    "Venu Akkamgari",
+    "Venu Akkamgari portfolio",
+    "Venu Akkamgari developer",
+    "Akkamgari Venu",
+    "Full Stack Developer",
+  ],
   openGraph: {
     type: "website",
-    title: "Venu Akkamgari - Full Stack Developer",
+    locale: "en_IN",
+    url: siteUrl(),
+    siteName: "Venu Akkamgari",
+    title: "Venu Akkamgari | Full Stack Developer",
     description:
-      "Full Stack Developer building fast, large-scale commerce platforms with Next.js, Node.js and MongoDB.",
+      "Official website of Venu Akkamgari, Full Stack Developer and NIT Uttarakhand CSE graduate.",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Venu Akkamgari | Full Stack Developer",
+    description:
+      "Official website of Venu Akkamgari, Full Stack Developer and NIT Uttarakhand CSE graduate.",
+  },
+  alternates: { canonical: siteUrl() },
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
     shortcut: "/favicon.svg",
     apple: "/favicon.svg",
   },
-  robots: { index: true, follow: true },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
 };
 
 export const viewport: Viewport = {

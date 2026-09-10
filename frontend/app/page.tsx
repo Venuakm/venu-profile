@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { fetchPublic } from "@/lib/api";
 import { fallbackContent } from "@/lib/fallback";
+import { nameKeywords, personJsonLd } from "@/lib/seo";
+import { absoluteUrl, displayName, siteUrl } from "@/lib/site";
 import type { Project, SiteContent } from "@/lib/types";
 import { Nav } from "@/components/site/nav";
 import { Hero } from "@/components/site/hero";
 import { About, Education, Experience, Skills } from "@/components/site/sections";
 import { Work } from "@/components/site/work";
 import { Contact, Footer } from "@/components/site/contact";
+import { JsonLd } from "@/components/site/json-ld";
 import { AmbientBackground, CursorGlow, Preloader, ScrollProgress, SmoothScroll } from "@/components/site/chrome";
 
 export const revalidate = 20;
@@ -26,14 +29,34 @@ async function getData() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const { content } = await getData();
+  const name = displayName(content.hero?.firstName, content.hero?.lastName);
+  const title = content.meta?.title || `${name} | Full Stack Developer`;
+  const description =
+    content.meta?.description ||
+    `Official website of ${name}, Full Stack Developer. Next.js, Node.js and MongoDB.`;
+  const ogImages = content.meta?.ogImage ? [absoluteUrl(content.meta.ogImage)] : undefined;
+
   return {
-    title: content.meta?.title,
-    description: content.meta?.description,
-    keywords: content.meta?.keywords,
+    title,
+    description,
+    keywords: nameKeywords(content),
+    authors: [{ name, url: siteUrl() }],
+    alternates: { canonical: siteUrl() },
     openGraph: {
-      title: content.meta?.title,
-      description: content.meta?.description,
-      images: content.meta?.ogImage ? [content.meta.ogImage] : undefined,
+      type: "profile",
+      url: siteUrl(),
+      siteName: name,
+      title,
+      description,
+      images: ogImages,
+      firstName: content.hero?.firstName,
+      lastName: content.hero?.lastName,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ogImages,
     },
   };
 }
@@ -58,6 +81,7 @@ export default async function HomePage() {
       {content.theme?.cursorGlow !== false ? <CursorGlow /> : null}
       {content.theme?.animatedBackground !== false ? <AmbientBackground /> : null}
 
+      <JsonLd data={personJsonLd(content)} />
       <Nav nav={content.nav} />
       <Hero hero={content.hero} marquee={marquee} />
       <About about={content.about} />
